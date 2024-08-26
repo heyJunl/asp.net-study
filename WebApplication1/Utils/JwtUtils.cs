@@ -22,24 +22,31 @@ public class JwtUtils
 
     public string GenerateToken(User user)
     {
-        // 创建数组存储用户相关信息
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.Sid, user.Id),
-            new Claim(ClaimTypes.Surname, user.Username),
-            new Claim(ClaimTypes.Role, "User"),
-            new Claim("User", "1")
-        };
-        // 创建对称加密密钥，并创建签名凭证
+        
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"] ?? ""));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        
+
+        var claims = new[]
+        {
+            new Claim("Id", user.Id),
+            new Claim("Username", user.Username),
+            new Claim("Role", "User"),
+            new Claim("User", "1"),
+            new Claim(ClaimTypes.Role, "Permission"),
+            new Claim("Issuer", _configuration["Jwt:Issuer"]),
+            new Claim(JwtRegisteredClaimNames.Aud, _configuration["Jwt:Audience"]),
+            new Claim("NotBefore", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ")),
+            new Claim(JwtRegisteredClaimNames.Exp, (DateTime.Now.AddDays(1).ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString()), // 添加 exp claim
+        };
+
         var token = new JwtSecurityToken(
-            _configuration["Jwt:Issuer"],   // 发行人
-            _configuration["Jwt:Audience"], // 受众
+            issuer: _configuration["Jwt:Issuer"],
+            audience: _configuration["Jwt:Audience"],
             claims,
-            expires: DateTime.Now.AddDays(1),   // 过期时间 
-            signingCredentials: credentials);   // 签名凭证
+            notBefore: DateTime.Now,
+            expires: DateTime.Now.AddDays(1),
+            signingCredentials: credentials);
+        Console.WriteLine(token);
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

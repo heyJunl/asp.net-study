@@ -1,9 +1,12 @@
+using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using WebApplication1.DbContexts;
 using WebApplication1.Service;
 using WebApplication1.Service.Impl;
@@ -23,7 +26,6 @@ builder.Services.AddLogging(loggingBuilder =>
 {
     loggingBuilder.AddConsole(); // 添加控制台日志提供者
     loggingBuilder.SetMinimumLevel(LogLevel.Information); // 设置最低日志级别为 Information
-    
 });
 
 // 配置授权
@@ -34,7 +36,11 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Teacher", policy => policy.RequireClaim("Permission", "2"));
     options.AddPolicy("Student", policy => policy.RequireClaim("Permission", "3"));
     options.AddPolicy("Visitor", policy => policy.RequireClaim("Permission", "0"));
-    options.AddPolicy("User", policy => policy.RequireClaim("User"));
+    // options.AddPolicy("User", policy => policy.RequireClaim("User"));
+    options.AddPolicy("Permission", policy => policy.RequireClaim("Permission"));
+    options.AddPolicy("User", policy=> policy.RequireClaim("User"));
+    options.AddPolicy("Role", policy => policy.RequireClaim("Role"));
+    
 
     // 设置默认策略
     options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
@@ -78,25 +84,92 @@ builder.Services.AddDbContext<InfoContext>(opt =>
 
 // 配置JWT身份验证策略
 // 单例注入
-builder.Services.AddSingleton(new JwtUtils(builder.Configuration)); 
+builder.Services.AddSingleton(new JwtUtils(builder.Configuration));
+
 // 配置身份验证
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,  // 发行人是否合法
-            ValidateAudience = true,    // 目标受众是否正确
-            ValidateLifetime = true,    // 有效期是否过期
-            ValidateIssuerSigningKey = true,    // 签名密钥是否正确
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],  // 从应用配置中读取发行人
-            ValidAudience = builder.Configuration["Jwt:Audience"],  // 从应用配置中读取标识符
-            IssuerSigningKey =  
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecurityKey"] ?? "")),  // 通过应用程序配置中获取密钥字符串
-            ClockSkew = TimeSpan.FromSeconds(30),   // 允许的时间偏差
-            RequireExpirationTime = true    // JWT是否包含过期时间
+            ValidateIssuer = true, // 发行人是否合法
+            ValidateAudience = true, // 目标受众是否正确
+            ValidateLifetime = true, // 有效期是否过期
+            ValidateIssuerSigningKey = true, // 签名密钥是否正确
+            ValidIssuer = builder.Configuration["Jwt:Issuer"], // 从应用配置中读取发行人
+            ValidAudience = builder.Configuration["Jwt:Audience"], // 从应用配置中读取标识符
+            IssuerSigningKey =
+                new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecurityKey"] ?? "")), // 通过应用程序配置中获取密钥字符串
+            ClockSkew = TimeSpan.FromSeconds(30), // 允许的时间偏差
+            RequireExpirationTime = true // JWT是否包含过期时间
+        };
+
+        options.UseSecurityTokenValidators = true;
+        // 捕获并处理认证事件
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                var exception = context.Exception;
+
+                if (exception is SecurityTokenExpiredException)
+                {
+                    context.Response.Headers.Add("Token-Expired", "true");
+                }
+                else if (exception is SecurityTokenInvalidSignatureException)
+                {
+                    context.Response.Headers.Add("Token-Invalid-Signature", "true");
+                }
+                else if (exception is SecurityTokenInvalidAudienceException)
+                {
+                    context.Response.Headers.Add("Token-Invalid-Audience", "true");
+                }
+                else if (exception is SecurityTokenInvalidIssuerException)
+                {
+                    context.Response.Headers.Add("Token-Invalid-Issuer", "true");
+                }
+                else if (exception is SecurityTokenNoExpirationException)
+                {
+                    context.Response.Headers.Add("Token-No-Expiration", "true");
+                }
+                else
+                {
+                    // 添加日志记录
+                    Console.WriteLine(exception.ToString(), "An unhandled exception occurred during authentication.");
+                }
+
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+
+                if (claimsIdentity != null && !claimsIdentity.HasClaim(c => c.Type == "required_claim"))
+                {
+                    context.Fail("Unauthorized"); // 如果校验失败，终止请求
+                }
+
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                // 自定义处理失败挑战的响应
+                context.HandleResponse();
+                context.Response.StatusCode = 401;
+                context.Response.ContentType = "application/json";
+
+                // 获取异常信息
+                var errorInfo = context.Error;
+                var errorDescription = context.ErrorDescription;
+
+                var result = JsonConvert.SerializeObject(new { error = errorInfo, error_description = errorDescription });
+                context.Response.WriteAsync(result);
+                return Task.CompletedTask;
+            }
         };
     });
+
 
 // 配置Redis
 var section = builder.Configuration.GetSection("Redis:Default");
@@ -114,6 +187,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
 }
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
@@ -157,4 +231,3 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
-
