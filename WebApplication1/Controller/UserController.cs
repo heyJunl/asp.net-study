@@ -4,9 +4,11 @@
  */
 
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Dto;
 using WebApplication1.Entity;
 using WebApplication1.Service;
 using WebApplication1.Utils;
+using WebApplication1.Vo;
 
 namespace WebApplication1.Controller;
 
@@ -42,5 +44,17 @@ public class UserController: ControllerBase
         var token = "TOKEN_" + HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
         _redis.GetDatabase().KeyDelete(token);
         return Ok("删除成功！");
+    }
+
+    [HttpPost("Page")]
+    public async Task<ActionResult<PaginatedResponse<UserPageVo>>> Page(QueryUserPage queryUserPage)
+    {
+        return Ok(await _userService.QueryUserPage(queryUserPage));
+    }
+
+    [HttpPost("Update")]
+    public async Task<ActionResult<String>> Update(UserUpdateDto dto)
+    {
+        return Ok(await _userService.Update(dto));
     }
 }

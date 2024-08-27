@@ -3,14 +3,18 @@
  * @Description:
  */
 
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using WebApplication1.Common.Enums;
 using WebApplication1.DbContexts;
+using WebApplication1.Dto;
 using WebApplication1.Entity;
 using WebApplication1.Utils;
+using WebApplication1.Vo;
 
 namespace WebApplication1.Service.Impl;
 
@@ -19,13 +23,15 @@ public class UserServiceImpl : IUserService
     private readonly InfoContext _info;
     private readonly JwtUtils _jwt;
     private readonly RedisUtils _redis;
+    private readonly IMapper _mapper;
     
 
-    public UserServiceImpl(InfoContext info, JwtUtils jwt, RedisUtils redis)
+    public UserServiceImpl(InfoContext info, JwtUtils jwt, RedisUtils redis, IMapper mapper)
     {
         this._info = info;
         this._jwt = jwt;
         this._redis = redis;
+        this._mapper = mapper;
     }
     
     public async Task<ActionResult<string>> Add(User user)
@@ -70,6 +76,87 @@ public class UserServiceImpl : IUserService
         }
     }
     
+
+    public async Task<ActionResult<PaginatedResponse<UserPageVo>>> QueryUserPage(QueryUserPage query)
+    {
+        var totalCount = await _info.User.CountAsync();
+        var page = new PageParam(query.PageNo.Value, query.PageSize.Value, totalCount);
+        var wrapper = _info.User.AsQueryable();
+        if (!string.IsNullOrEmpty(query.Username))
+        {
+            wrapper.Where(e => e.Username.Contains(query.Username));
+        }
+        if (query.State != null)
+        {
+            wrapper.Where(e => e.State == query.State);
+        }
+        
+        if (query.Permission !=null)
+        {
+            wrapper.Where(e => e.Permission == query.State);
+        }
+
+        List<User> listAsync = await wrapper.Skip((page.PageNo.Value - 1) * page.PageSize.Value).Take(page.PageSize.Value).OrderBy(e => e.CreateTime).ToListAsync();
+        List<UserPageVo> result = _mapper.Map<List<UserPageVo>>(listAsync);
+        return new PaginatedResponse<UserPageVo>(result, page);
+    }
+
+    public async Task<ActionResult<String>> Update(UserUpdateDto dto)
+    {
+        if (!string.IsNullOrWhiteSpace(dto.Pwd))
+        {
+            return "更新成功";
+        }
+        else
+        {
+            // 获取所有跟踪的实体
+            var trackedEntities = _info.ChangeTracker.Entries()
+                .Select(entry => new
+                {
+                    Entity = entry.Entity,
+                    State = entry.State
+                })
+                .ToList();
+
+// 遍历并输出跟踪的实体及其状态
+            foreach (var trackedEntity in trackedEntities)
+            {
+                Console.WriteLine($"Entity: {trackedEntity.Entity}, State: {trackedEntity.State}");
+            }
+            var result = await _info.User.AsNoTracking().FirstOrDefaultAsync(e => e.Id == dto.Id, CancellationToken.None).ConfigureAwait(false);
+            if (result == null)
+            {
+                return "用户不存在";
+            }
+            else
+            {
+                string pwd = result.Pwd;
+                string salt = result.Salt;
+                result = _mapper.Map<User>(dto);
+                result.Pwd = pwd;
+                result.Salt = salt;
+                // 获取所有跟踪的实体
+                trackedEntities = _info.ChangeTracker.Entries()
+                    .Select(entry => new
+                    {
+                        Entity = entry.Entity,
+                        State = entry.State
+                    })
+                    .ToList();
+
+// 遍历并输出跟踪的实体及其状态
+                foreach (var trackedEntity in trackedEntities)
+                {
+                    Console.WriteLine($"Entity: {trackedEntity.Entity}, State: {trackedEntity.State}");
+                }
+                
+                _info.Update(result);
+                // _info.Entry(result).State = EntityState.Modified;
+                await _info.SaveChangesAsync();
+                return "更新成功";
+            }
+        }
+    }
 
     
     /**

@@ -55,6 +55,7 @@ public class InfoController : ControllerBase
 
     [HttpPost("QueryById")]
     [Authorize(Policy = "Permission")]
+    // [Authorize(Roles = "Permission")]
     public async Task<ActionResult<Student>> QueryById(string id)
     {
         return Ok(await _studentService.QueryById(id));
