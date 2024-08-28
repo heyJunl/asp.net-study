@@ -4,6 +4,7 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using WebApplication1.Utils;
 
 namespace WebApplication1.Entity;
@@ -15,7 +16,10 @@ public class Clazz : BaseData
     public string? Number { get; set; }
     public string? Year { get; set; }
     public string? Room { get; set; }
-    public int TeacherId { get; set; }
-    public int Total { get; set; }
-    public int Sub { get; set; }
+    [Column("teacher_id")]
+    public string? TeacherId { get; set; }
+
+    public int? Total { get; set; } = 0;
+    public int? Sub { get; set; } = 0;
+    public int State { get; set; } = 0;
 }

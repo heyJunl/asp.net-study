@@ -24,7 +24,7 @@ public class UserServiceImpl : IUserService
     private readonly JwtUtils _jwt;
     private readonly RedisUtils _redis;
     private readonly IMapper _mapper;
-    
+
 
     public UserServiceImpl(InfoContext info, JwtUtils jwt, RedisUtils redis, IMapper mapper)
     {
@@ -33,13 +33,14 @@ public class UserServiceImpl : IUserService
         this._redis = redis;
         this._mapper = mapper;
     }
-    
+
     public async Task<ActionResult<string>> Add(User user)
     {
-        if (_info.User.FirstOrDefaultAsync(e => e.Username == user.Username).Result !=null)
+        if (_info.User.FirstOrDefaultAsync(e => e.Username == user.Username).Result != null)
         {
             throw new Exception("用户名已存在");
         }
+
         var salt = GenerateSalt();
         var pwdHash = GeneratePassword(user.Pwd, salt);
         var saveUser = new User(user.Username, Convert.ToBase64String(salt), pwdHash);
@@ -47,7 +48,7 @@ public class UserServiceImpl : IUserService
         await _info.SaveChangesAsync();
         return "添加成功";
     }
-    
+
     public async Task<ActionResult<string>> Login(User user)
     {
         var userInfo = _info.User.FirstOrDefaultAsync(e => e.Username == user.Username).Result;
@@ -64,18 +65,19 @@ public class UserServiceImpl : IUserService
             var userToken = new UserToken(userInfo.Id, userInfo.Username, userInfo.Permission);
             var userJson = JsonConvert.SerializeObject(userToken);
             _redis.GetDatabase().StringSet("TOKEN_" + token, userJson, TimeSpan.FromDays(1));
-            
-            return$"登录成功，token = {token}";
+
+            return $"登录成功，token = {token}";
         }
-        else if (userInfo.Pwd != pwdHash && userInfo.State == StateType.ACTIVATE.GetHashCode())
+        else if (userInfo.Pwd == pwdHash && userInfo.State == (int)StateType.DEACTIVATE)
         {
             return "账号冻结";
-        } else
+        }
+        else
         {
             return "密码错误";
         }
     }
-    
+
 
     public async Task<ActionResult<PaginatedResponse<UserPageVo>>> QueryUserPage(QueryUserPage query)
     {
@@ -86,70 +88,53 @@ public class UserServiceImpl : IUserService
         {
             wrapper.Where(e => e.Username.Contains(query.Username));
         }
+
         if (query.State != null)
         {
             wrapper.Where(e => e.State == query.State);
         }
-        
-        if (query.Permission !=null)
+
+        if (query.Permission != null)
         {
             wrapper.Where(e => e.Permission == query.State);
         }
 
-        List<User> listAsync = await wrapper.Skip((page.PageNo.Value - 1) * page.PageSize.Value).Take(page.PageSize.Value).OrderBy(e => e.CreateTime).ToListAsync();
+        List<User> listAsync = await wrapper.Skip((page.PageNo.Value - 1) * page.PageSize.Value)
+            .Take(page.PageSize.Value).OrderBy(e => e.CreateTime).ToListAsync();
         List<UserPageVo> result = _mapper.Map<List<UserPageVo>>(listAsync);
         return new PaginatedResponse<UserPageVo>(result, page);
     }
 
     public async Task<ActionResult<String>> Update(UserUpdateDto dto)
     {
-        if (!string.IsNullOrWhiteSpace(dto.Pwd))
+        var result = await _info.User.AsNoTracking()
+            .FirstOrDefaultAsync(e => e.Id == dto.Id);
+        if (result == null)
         {
-            return "更新成功";
+            return "用户不存在";
         }
         else
         {
-            // 获取所有跟踪的实体
-            var trackedEntities = _info.ChangeTracker.Entries()
-                .Select(entry => new
-                {
-                    Entity = entry.Entity,
-                    State = entry.State
-                })
-                .ToList();
-
-// 遍历并输出跟踪的实体及其状态
-            foreach (var trackedEntity in trackedEntities)
+            if (!string.IsNullOrWhiteSpace(dto.Pwd))
             {
-                Console.WriteLine($"Entity: {trackedEntity.Entity}, State: {trackedEntity.State}");
-            }
-            var result = await _info.User.AsNoTracking().FirstOrDefaultAsync(e => e.Id == dto.Id, CancellationToken.None).ConfigureAwait(false);
-            if (result == null)
-            {
-                return "用户不存在";
+                var salt = GenerateSalt();
+                var pwdHash = GeneratePassword(dto.Pwd, salt);
+                result = _mapper.Map<User>(dto);
+                result.Pwd = pwdHash;
+                result.Salt = Convert.ToBase64String(salt);
+                _info.Update(result);
+                await _info.SaveChangesAsync();
+                return "更新成功";
             }
             else
             {
                 string pwd = result.Pwd;
                 string salt = result.Salt;
-                result = _mapper.Map<User>(dto);
+                
+                // _mapper.Map(dto, result); 这个写法在tracking的时候可成功
+                result = _mapper.Map<User>(dto);    // 这个写法在tracking的情况下会id重复
                 result.Pwd = pwd;
                 result.Salt = salt;
-                // 获取所有跟踪的实体
-                trackedEntities = _info.ChangeTracker.Entries()
-                    .Select(entry => new
-                    {
-                        Entity = entry.Entity,
-                        State = entry.State
-                    })
-                    .ToList();
-
-// 遍历并输出跟踪的实体及其状态
-                foreach (var trackedEntity in trackedEntities)
-                {
-                    Console.WriteLine($"Entity: {trackedEntity.Entity}, State: {trackedEntity.State}");
-                }
-                
                 _info.Update(result);
                 // _info.Entry(result).State = EntityState.Modified;
                 await _info.SaveChangesAsync();
@@ -158,7 +143,40 @@ public class UserServiceImpl : IUserService
         }
     }
 
+    public async Task<ActionResult<string>> Delete(string id)
+    {
+        var user = await _info.User.FirstOrDefaultAsync(e => e.Id == id);
+        if (user == null)
+        {
+            throw new ArgumentException("用户不存在");
+        }
+        user.State = StateType.DEACTIVATE.GetHashCode();
+        await _info.SaveChangesAsync();
+        return "删除成功";
+    }
+
+
+
+
+
+    public async Task<ActionResult<UserPageVo>> QueryById(string id)
+    {
+        var user = await _info.User.FirstOrDefaultAsync(e => e.Id == id);
+        if (user == null)
+        {
+            throw new ArgumentException("用户不存在");
+        }
+
+        var result = _mapper.Map<UserPageVo>(user);
+        return result;
+    }
     
+    
+    
+    
+    
+    
+
     /**
      * 生成盐
      */
@@ -184,6 +202,4 @@ public class UserServiceImpl : IUserService
             return Convert.ToBase64String(hash);
         }
     }
-    
-    
 }

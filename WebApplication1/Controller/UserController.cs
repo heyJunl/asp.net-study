@@ -4,6 +4,7 @@
  */
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using WebApplication1.Dto;
 using WebApplication1.Entity;
 using WebApplication1.Service;
@@ -41,7 +42,18 @@ public class UserController: ControllerBase
     [HttpPost("Logout")]
     public async Task<ActionResult<string>> Logout()
     {
-        var token = "TOKEN_" + HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
+        var token = HttpContext.Request.Headers["Authorization"].ToString();
+        if (String.IsNullOrWhiteSpace(token))
+        {
+            return "请携带Token";
+        }
+
+        string[] tokenList = token.Split(" ");
+        if (tokenList.Length != 2 || String.IsNullOrWhiteSpace(tokenList[1]))
+        {
+            return "无效的Token";
+        }
+        token = "TOKEN_" + tokenList[1];
         _redis.GetDatabase().KeyDelete(token);
         return Ok("删除成功！");
     }
@@ -53,8 +65,22 @@ public class UserController: ControllerBase
     }
 
     [HttpPost("Update")]
-    public async Task<ActionResult<String>> Update(UserUpdateDto dto)
+    public async Task<ActionResult<string>> Update(UserUpdateDto dto)
     {
         return Ok(await _userService.Update(dto));
     }
+
+    [HttpPost("Delete")]
+    public async Task<ActionResult<string>> Delete(string id)
+    {
+        return Ok(await _userService.Delete(id));
+    }
+
+    [HttpPost("QueryById")]
+    public async Task<ActionResult<UserPageVo>> QueryById(string id)
+    {
+        return Ok(await _userService.QueryById(id));
+    }
+    
+    
 }

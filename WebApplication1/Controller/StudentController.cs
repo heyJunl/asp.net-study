@@ -15,13 +15,13 @@ namespace WebApplication1.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
-public class InfoController : ControllerBase
+public class StudentController : ControllerBase
 {
     private readonly IStudentService _studentService;
 
     private readonly InfoContext _info;
     
-    public InfoController(IStudentService studentService, InfoContext info)
+    public StudentController(IStudentService studentService, InfoContext info)
     {
         this._studentService = studentService;
         this._info = info;

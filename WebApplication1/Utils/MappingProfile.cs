@@ -16,5 +16,11 @@ public class MappingProfile : Profile
     {
         CreateMap<User, UserPageVo>().ReverseMap();
         CreateMap<User, UserUpdateDto>().ReverseMap();
+        CreateMap<ClazzAddDto, Clazz>().ReverseMap();
+        CreateMap<ClazzPageDto, Clazz>().ReverseMap();
+        CreateMap<ClazzUpdateDto, Clazz>().ReverseMap();
+
+
+
     }
 }

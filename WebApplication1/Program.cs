@@ -25,6 +25,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IStudentService, StudentServiceImpl>();
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
+builder.Services.AddScoped<IClazzService, ClazzServiceImpl>();
+builder.Services.AddScoped<ITeacherService, TeacherServiceImpl>();
 builder.Services.AddLogging(loggingBuilder =>
 {
     loggingBuilder.AddConsole(); // 添加控制台日志提供者
