@@ -66,4 +66,10 @@ public class StudentController : ControllerBase
     {
         return Ok(await _studentService.Page(student));
     }
+
+    [HttpPost("QueryClassmate")]
+    public async Task<ActionResult<Student>> QueryClassmate(string id)
+    {
+        return Ok(await _studentService.QueryClassmate(id));
+    }
 }

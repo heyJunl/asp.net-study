@@ -30,4 +30,41 @@ public class TeacherController: ControllerBase
     {
         return Ok(await _teacherService.Add(teacher));
     }
+
+    [HttpPost("Delete")]
+    public async Task<ActionResult<string>> Delete(string id)
+    {
+        return Ok(await _teacherService.Delete(id));
+    }
+
+    [HttpPost("Update")]
+    public async Task<ActionResult<string>> Update(Teacher teacher)
+    {
+        return Ok(await _teacherService.Update(teacher));
+    }
+
+    [HttpPost("Page")]
+    public async Task<ActionResult<PaginatedResponse<Teacher>>> Page(TeacherPageDto dto)
+    {
+        return Ok(await _teacherService.QueryTeacherPage(dto));
+    }
+
+    [HttpPost("Query")]
+    public async Task<ActionResult<Teacher>> Query(string id)
+    {
+        return Ok(await _teacherService.Query(id));
+    }
+
+    [HttpPost("EntrustWork")]
+    public async Task<ActionResult<string>> EntrustWork(string outId, string inId)
+    {
+        
+        return Ok(await _teacherService.EntrustWork(outId, inId));
+    }
+    
+    [HttpPost("ChargedWork")]
+    public async Task<ActionResult<List<StudentClazzVo>>> ChargedWork(string id)
+    {
+        return Ok(await _teacherService.ChargedWork(id));
+    }
 }

@@ -117,4 +117,16 @@ public class StudentServiceImpl : IStudentService
 
         throw new ArgumentNullException("请输入分页参数！");
     }
+
+    public async Task<ActionResult<List<Student>>> QueryClassmate(string id)
+    {
+        var student = _info.Student.FirstOrDefaultAsync(e => e.Id == id);
+        if (student.Result == null)
+        {
+            throw new Exception("学生不存在！");
+        }
+        var list = _info.Student.Where(e => e.ClassId == student.Result.ClassId).ToListAsync();
+        return list.Result;
+
+    }
 }

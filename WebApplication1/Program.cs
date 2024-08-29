@@ -197,7 +197,7 @@ var _instanceName = section.GetSection("InstanceName").Value ?? "";
 int _defaultDB = int.Parse(section.GetSection("DefaultDB").Value ?? "0");
 builder.Services.AddSingleton(new RedisUtils(_connectionString, _instanceName, _defaultDB));
 
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 
 var app = builder.Build();

@@ -86,17 +86,17 @@ public class UserServiceImpl : IUserService
         var wrapper = _info.User.AsQueryable();
         if (!string.IsNullOrEmpty(query.Username))
         {
-            wrapper.Where(e => e.Username.Contains(query.Username));
+            wrapper = wrapper.Where(e => e.Username.Contains(query.Username));
         }
 
         if (query.State != null)
         {
-            wrapper.Where(e => e.State == query.State);
+            wrapper = wrapper.Where(e => e.State == query.State);
         }
 
         if (query.Permission != null)
         {
-            wrapper.Where(e => e.Permission == query.State);
+            wrapper = wrapper.Where(e => e.Permission == query.State);
         }
 
         List<User> listAsync = await wrapper.Skip((page.PageNo.Value - 1) * page.PageSize.Value)

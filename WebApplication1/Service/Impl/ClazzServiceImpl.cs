@@ -90,34 +90,34 @@ public class ClazzServiceImpl: IClazzService
     {
         var clazz = _mapper.Map<Clazz>(input);
         var wrapper = _info.Clazz.AsQueryable();
-        if (string.IsNullOrWhiteSpace(clazz.Grade))
+        if (!string.IsNullOrWhiteSpace(clazz.Grade))
         {
-            wrapper.Where(e => e.Grade == clazz.Grade);
+            wrapper = wrapper.Where(e => e.Grade == clazz.Grade);
         }
 
-        if (String.IsNullOrWhiteSpace(clazz.Id))
+        if (!String.IsNullOrWhiteSpace(clazz.Id))
         {
-            wrapper.Where(e => e.Id == clazz.Id);
+            wrapper = wrapper.Where(e => e.Id == clazz.Id);
         }
-        if (String.IsNullOrWhiteSpace(clazz.Number))
+        if (!String.IsNullOrWhiteSpace(clazz.Number))
         {
-            wrapper.Where(e => e.Number == clazz.Number);
+            wrapper = wrapper.Where(e => e.Number == clazz.Number);
         }
-        if (String.IsNullOrWhiteSpace(clazz.Year))
+        if (!String.IsNullOrWhiteSpace(clazz.Year))
         {
-            wrapper.Where(e => e.Year == clazz.Year);
+            wrapper = wrapper.Where(e => e.Year == clazz.Year);
         }
-        if (String.IsNullOrWhiteSpace(clazz.Room))
+        if (!String.IsNullOrWhiteSpace(clazz.Room))
         {
-            wrapper.Where(e => e.Room == clazz.Room);
+            wrapper = wrapper.Where(e => e.Room == clazz.Room);
         }
-        if (String.IsNullOrWhiteSpace(clazz.TeacherId))
+        if (!String.IsNullOrWhiteSpace(clazz.TeacherId))
         {
-            wrapper.Where(e => e.TeacherId == clazz.TeacherId);
+            wrapper = wrapper.Where(e => e.TeacherId == clazz.TeacherId);
         }
         if (clazz.Sub != null)
         {
-            wrapper.Where(e => e.Sub == clazz.Sub);
+            wrapper = wrapper.Where(e => e.Sub == clazz.Sub);
         }
 
         return wrapper;
