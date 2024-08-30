@@ -73,6 +73,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
+            },
+            "Xunit.DependencyInjection": {
+              "target": "Package",
+              "version": "[9.3.1, )"
             }
           },
           "imports": [

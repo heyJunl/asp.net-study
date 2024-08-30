@@ -23,51 +23,65 @@ public class StudentServiceImpl : IStudentService
 
     public async Task<ActionResult<string>> Add(Student student)
     {
+        var clazz = await _info.Clazz.FirstOrDefaultAsync(e => e.Id == student.ClassId);
+        if (clazz == null)
+        {
+            throw new Exception("班级信息异常");
+        }
         _info.Student.Add(student);
+        clazz.Total++;
+        
         await _info.SaveChangesAsync();
         return "添加成功";
     }
 
     public async Task<ActionResult<string>> Update(Student student)
     {
-        if (string.IsNullOrWhiteSpace(student.Id))
+        var originData = await _info.Student.AsNoTracking().FirstOrDefaultAsync(e=>e.Id == student.Id);
+        if (originData == null || string.IsNullOrWhiteSpace(student.Id))
         {
-            return "id不能为空！";
+            throw new Exception("学生信息异常");
+        }
+        var originClazz = await _info.Clazz.FirstOrDefaultAsync(e => e.Id == originData.ClassId);
+        if (originClazz == null || string.IsNullOrWhiteSpace(originData.ClassId))
+        {
+            throw new Exception("班级信息异常");
         }
 
+        if (string.IsNullOrWhiteSpace(student.Id) || originData == null)
+        {
+            return "学生信息异常";
+        }
+
+        if (student.ClassId != originData.ClassId)
+        {
+            originClazz.Total--;
+            var clazz = await _info.Clazz.FirstOrDefaultAsync(e => e.Id == student.ClassId);
+            clazz.Total++;
+        }
         _info.Student.Update(student);
-
         // _info.Entry(student).State = EntityState.Modified;
-
-        try
-        {
-            await _info.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException e)
-        {
-            return e.Data.ToString();
-        }
+        await _info.SaveChangesAsync();
+        
 
         return "更新成功！";
     }
 
-    public async Task<ActionResult<string>> Delete(Student student)
+    public async Task<ActionResult<string>> Delete(string id)
     {
-        if (string.IsNullOrWhiteSpace(student.Id))
+        var student = await _info.Student.FirstOrDefaultAsync(e=>e.Id==id);
+        if (student == null)
         {
-            return "id不能为空！";
+            throw new Exception("学生信息异常！");
         }
-
+        var clazz = await _info.Clazz.FirstOrDefaultAsync(e => e.Id==student.ClassId);
+        clazz.Total--;
         // _info.Entry(student).State = EntityState.Deleted;
         _info.Student.Remove(student);
-        try
-        {
-            await _info.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            return e.Data.ToString();
-        }
+     
+        await _info.SaveChangesAsync();
+   
+
 
         return "删除成功！";
     }

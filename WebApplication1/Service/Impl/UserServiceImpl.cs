@@ -130,9 +130,9 @@ public class UserServiceImpl : IUserService
             {
                 string pwd = result.Pwd;
                 string salt = result.Salt;
-                
+
                 // _mapper.Map(dto, result); 这个写法在tracking的时候可成功
-                result = _mapper.Map<User>(dto);    // 这个写法在tracking的情况下会id重复
+                result = _mapper.Map<User>(dto); // 这个写法在tracking的情况下会id重复
                 result.Pwd = pwd;
                 result.Salt = salt;
                 _info.Update(result);
@@ -150,13 +150,11 @@ public class UserServiceImpl : IUserService
         {
             throw new ArgumentException("用户不存在");
         }
+
         user.State = StateType.DEACTIVATE.GetHashCode();
         await _info.SaveChangesAsync();
         return "删除成功";
     }
-
-
-
 
 
     public async Task<ActionResult<UserPageVo>> QueryById(string id)
@@ -170,12 +168,7 @@ public class UserServiceImpl : IUserService
         var result = _mapper.Map<UserPageVo>(user);
         return result;
     }
-    
-    
-    
-    
-    
-    
+
 
     /**
      * 生成盐

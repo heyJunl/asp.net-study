@@ -16,4 +16,6 @@ public interface IClazzService
     public Task<ActionResult<string>> Update(ClazzUpdateDto dto);
 
     public Task<ActionResult<Clazz>> Query(string id);
+
+    public Task<ActionResult<List<GradeStudentVo>>> QueryGradeStudent(string clazzId);
 }

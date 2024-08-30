@@ -68,4 +68,10 @@ public class ClazzController : ControllerBase
     {
         return Ok(await _clazzService.Query(id));
     }
+
+    [HttpPost("QueryGradeStudent")]
+    public async Task<ActionResult<List<GradeStudentVo>>> QueryGradeStudent(string clazzId)
+    {
+        return Ok(await _clazzService.QueryGradeStudent(clazzId));
+    }
 }

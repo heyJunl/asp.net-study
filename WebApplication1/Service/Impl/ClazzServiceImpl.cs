@@ -83,6 +83,31 @@ public class ClazzServiceImpl: IClazzService
 
         return clazz;
     }
+
+    public async Task<ActionResult<List<GradeStudentVo>>> QueryGradeStudent(string clazzId)
+    {
+        var clazz = await _info.Clazz.FirstOrDefaultAsync(e=> e.Id == clazzId);
+        if (clazz == null)
+        {
+            throw new Exception("班级不存在");
+        }
+
+        var teacher = await _info.Teacher.Where(e => e.Id == clazz.TeacherId).FirstOrDefaultAsync();
+        if (teacher == null)
+        {
+            throw new Exception("教师信息异常");
+        }
+        var studentList = await _info.Student.Where(e => e.ClassId == clazzId).ToListAsync();
+        var result = new List<GradeStudentVo>();
+        studentList.ForEach(e =>
+        {
+            result.Add(new GradeStudentVo()
+            {
+                Grade = clazz.Grade, Total = clazz.Total, Sub = clazz.Sub, TeacherName = teacher.Name, StudentName = e.Name
+            });
+        });
+        return result;
+    }
     
     
     

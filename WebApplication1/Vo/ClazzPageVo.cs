@@ -7,6 +7,7 @@ namespace WebApplication1.Vo;
 
 public class ClazzPageVo
 {
+    public string id { get; set; }
     public string? Grade { get; set; }
     public string? Number { get; set; }
     public string? Year { get; set; }

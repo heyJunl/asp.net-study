@@ -41,9 +41,9 @@ public class StudentController : ControllerBase
     }
 
     [HttpDelete("Delete")]
-    public async Task<ActionResult<String>> Delete(Student student)
+    public async Task<ActionResult<string>> Delete(string id)
     {
-        return Ok(await _studentService.Delete(student));
+        return Ok(await _studentService.Delete(id));
     }
 
     [HttpPost("Query")]
@@ -72,4 +72,6 @@ public class StudentController : ControllerBase
     {
         return Ok(await _studentService.QueryClassmate(id));
     }
+
+    
 }
