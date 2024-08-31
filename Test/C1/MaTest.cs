@@ -3,6 +3,8 @@
  * @Description:
  */
 
+using Xunit.Sdk;
+
 namespace Test;
 
 public class MaTest
@@ -14,21 +16,19 @@ public class MaTest
         yield return new object[] { -3, 7, 4 };
         yield return new object[] { 0, 0, 0 };
     }
-    [Fact]
-    public void AddNumber()
-    {
-        var caculate = new Ma();
-        var result = caculate.Add(3, 5);
-        Assert.Equal(8, result);
-        
-    }
 
+    
+    
     [Theory]
-    [MemberData(nameof(GetComplexTestData))]
+    [CustomData(1, 2, 3)]
+    [CustomData(2, 3, 5)]
     public void Add(int first, int second, int sum)
     {
+        // Arrange
         var calculator = new Ma();
+        // Act
         var result = calculator.Add(first, second);
+        // Assert
         Assert.Equal(sum, result);
     }
 }

@@ -46,10 +46,6 @@
               "target": "Package",
               "version": "[17.8.0, )"
             },
-            "Xunit.DependencyInjection": {
-              "target": "Package",
-              "version": "[9.3.1, )"
-            },
             "coverlet.collector": {
               "target": "Package",
               "version": "[6.0.0, )"
@@ -152,10 +148,6 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
-            },
-            "Xunit.DependencyInjection": {
-              "target": "Package",
-              "version": "[9.3.1, )"
             }
           },
           "imports": [

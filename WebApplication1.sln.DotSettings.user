@@ -4,12 +4,12 @@
   &lt;Assembly Path="C:\Users\BOB.L\.nuget\packages\system.identitymodel.tokens.jwt\7.1.2\lib\net8.0\System.IdentityModel.Tokens.Jwt.dll" /&gt;&#xD;
   &lt;PhysicalFolder Path="C:\Users\BOB.L\.nuget\packages\xunit.dependencyinjection\9.3.1" Loaded="True" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=51f9ff02_002D7a3e_002D4313_002Db0be_002Def0dda1692ab/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Add" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=51f9ff02_002D7a3e_002D4313_002Db0be_002Def0dda1692ab/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B1D0D87A-CFC6-40E7-B5D2-0712D80C2584::net8.0::Test.TeacherTest.Add&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8c479c0c_002D4879_002D4c54_002D9d06_002Dfe1d14effa27/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AddNumber" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8c479c0c_002D4879_002D4c54_002D9d06_002Dfe1d14effa27/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="AddNumber" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B1D0D87A-CFC6-40E7-B5D2-0712D80C2584::net8.0::Test.MaTest.AddNumber&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::B1D0D87A-CFC6-40E7-B5D2-0712D80C2584::net8.0::Test.MaTest.Add&lt;/TestId&gt;&#xD;
