@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using WebApplication1.DbContexts;
+using WebApplication1.Handler;
 using WebApplication1.Service;
 using WebApplication1.Service.Impl;
 using WebApplication1.Utils;
@@ -213,6 +214,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
+app.UseMiddleware<ResponseWrapperMiddleware>();
 
 app.Use(async (context, next) =>
 {
