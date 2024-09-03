@@ -38,12 +38,12 @@ public class ClazzServiceImpl: IClazzService
     public async Task<ActionResult<string>> Delete(string id)
     {
         var clazz = await _info.Clazz.FirstOrDefaultAsync(e => e.Id == id);
-        if (clazz.Total > 0)
+        if (clazz?.Total > 0)
         {
             throw new Exception("该班级有学生，无法删除");
         }
         clazz.State = StateType.DEACTIVATE.GetHashCode();
-        _info.SaveChangesAsync();
+        await _info.SaveChangesAsync();
         return "删除成功";
     }
 
@@ -85,7 +85,7 @@ public class ClazzServiceImpl: IClazzService
         return clazz;
     }
 
-    public async Task<ActionResult<List<GradeStudentVo>>> QueryGradeStudent(string clazzId)
+    public async Task<ActionResult<List<GradeStudentVo>>> QueryClazzStudent(string clazzId)
     {
         var clazz = await _info.Clazz.FirstOrDefaultAsync(e=> e.Id == clazzId);
         if (clazz == null)

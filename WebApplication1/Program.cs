@@ -23,7 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-
+builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IStudentService, StudentServiceImpl>();
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddScoped<IClazzService, ClazzServiceImpl>();
@@ -215,6 +215,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
 app.UseMiddleware<ResponseWrapperMiddleware>();
+app.UseStatusCodePages();
 
 app.Use(async (context, next) =>
 {
@@ -250,8 +251,9 @@ app.MapGet("/weatherforecast", () =>
 app.MapControllers();
 app.Run();
 
-
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+public partial class Program{}
+

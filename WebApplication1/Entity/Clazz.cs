@@ -22,4 +22,9 @@ public class Clazz : BaseData
     public int? Total { get; set; } = 0;
     public int? Sub { get; set; } = 0;
     public int State { get; set; } = 0;
+
+    public Clazz()
+    {
+        
+    }
 }

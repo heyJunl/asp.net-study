@@ -3,6 +3,8 @@
  * @Description:
  */
 
+using System.Text.Json;
+
 namespace WebApplication1.Vo;
 
 public class ClazzPageVo
@@ -12,7 +14,12 @@ public class ClazzPageVo
     public string? Number { get; set; }
     public string? Year { get; set; }
     public string? Room { get; set; }
-    public int TeacherId { get; set; }
+    public string? TeacherId { get; set; }
     public int Total { get; set; }
     public int Sub { get; set; }
+
+    public override string ToString()
+    {
+        return JsonSerializer.Serialize(this);
+    }
 }

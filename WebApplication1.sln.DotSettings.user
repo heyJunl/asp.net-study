@@ -4,21 +4,68 @@
   &lt;Assembly Path="C:\Users\BOB.L\.nuget\packages\system.identitymodel.tokens.jwt\7.1.2\lib\net8.0\System.IdentityModel.Tokens.Jwt.dll" /&gt;&#xD;
   &lt;PhysicalFolder Path="C:\Users\BOB.L\.nuget\packages\xunit.dependencyinjection\9.3.1" Loaded="True" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=324bac14_002D7d3e_002D46d7_002Db44c_002D24aae8f1979f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Staff_ObjectCreation_ValuesAssignedCorrectly" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\BOB.L\AppData\Local\JetBrains\Rider2024.1\resharper-host\temp\Rider\vAny\CoverageData\_WebApplication1.-1739441469\Snapshot\snapshot.utdcvr</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0af39cb4_002Dcdc5_002D42cb_002Db8c7_002D60594c9295ef/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Add #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.ClazzServiceTest.AddClazz&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=51f9ff02_002D7a3e_002D4313_002Db0be_002Def0dda1692ab/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=23a21978_002D0a22_002D46bb_002Da746_002Dad22e2cdc8b1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Page #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::B1D0D87A-CFC6-40E7-B5D2-0712D80C2584::net8.0::Test.TeacherTest.Add&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.ClazzServiceTest.Page&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8c479c0c_002D4879_002D4c54_002D9d06_002Dfe1d14effa27/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AddNumber" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4f3ec37c_002Dfb0d_002D4bf4_002D9fcd_002D4692727259e6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Page #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.ClazzServiceTest.Staff_ObjectCreation_ValuesAssignedCorrectly&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.ClazzServiceTest.Page&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=512f1bdc_002D79c9_002D4a41_002Dbb29_002Deb50f4deb27b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Page" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.ClazzServiceTest.Page&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=53f6197e_002D3068_002D4592_002D9ef6_002D8d0506dc8110/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7348735f_002D10f5_002D4548_002D92f7_002Da80e6b54ec28/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add #6" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=78bf305a_002Db327_002D4ce6_002Da267_002Dcdaab818e490/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="QueryByGrade" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.ClazzServiceTest.QueryByGrade&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7bfa2f53_002D2c3c_002D44e8_002D9327_002D16be1e4f5707/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b4764087_002Dae2b_002D4507_002D82a7_002D44ed5af239e5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ce132e5c_002D5f9f_002D4827_002Dbe46_002D880ce3b2f3f6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d1a81940_002D411b_002D4131_002Da39c_002De593aa7d53ad/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Page #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.ClazzServiceTest.Page&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=dbe3d877_002D2701_002D4f9b_002Db90a_002D0465a3aef569/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AddClazz" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.ClazzServiceTest.AddClazz&lt;/TestId&gt;&#xD;
