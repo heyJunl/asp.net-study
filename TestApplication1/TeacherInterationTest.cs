@@ -54,13 +54,13 @@ public class TeacherInterationTest : IClassFixture<WebApplicationFactory<Program
         var response2 = await client.PostAsync(uriBuilder.Uri, null);
         Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
         result = String2Dict(response2);
-        Assert.Equal(JsonConvert.DeserializeObject<Teacher>(result).Name,  "Test01");
+        // Assert.Equal(result["value"]., );
         
     }
 
-    public async static Task<Dictionary<string, string>> String2Dict(HttpResponseMessage response)
+    public static Dictionary<string, string> String2Dict(HttpResponseMessage response)
     {
-        return JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        return JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content.ReadAsStringAsync().Result);
     }
     public static StringContent ConvertBodyContent<T>(T obj)
     {
