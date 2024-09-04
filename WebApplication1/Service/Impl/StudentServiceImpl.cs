@@ -3,10 +3,12 @@
  * @Description:
  */
 
+using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.DbContexts;
+using WebApplication1.Dto;
 using WebApplication1.Entity;
 
 namespace WebApplication1.Service.Impl;
@@ -14,9 +16,10 @@ namespace WebApplication1.Service.Impl;
 public class StudentServiceImpl : IStudentService
 {
     private readonly InfoContext _info;
-
-    public StudentServiceImpl(InfoContext info)
+    private readonly  IMapper _mapper;
+    public StudentServiceImpl(InfoContext info, IMapper mapper)
     {
+        this._mapper = mapper;
         this._info = info;
     }
 
@@ -35,10 +38,11 @@ public class StudentServiceImpl : IStudentService
         return "添加成功";
     }
 
-    public async Task<ActionResult<string>> Update(Student student)
+    public async Task<ActionResult<string>> Update(UpdateStudentDto param)
     {
-        var originData = await _info.Student.AsNoTracking().FirstOrDefaultAsync(e=>e.Id == student.Id);
-        if (originData == null || string.IsNullOrWhiteSpace(student.Id))
+        var originData = await _info.Student.FirstOrDefaultAsync(e=>e.Id == param.Id);
+        
+        if (originData == null || string.IsNullOrWhiteSpace(param.Id))
         {
             throw new Exception("学生信息异常");
         }
@@ -48,18 +52,19 @@ public class StudentServiceImpl : IStudentService
             throw new Exception("班级信息异常");
         }
 
-        if (string.IsNullOrWhiteSpace(student.Id) || originData == null)
+        if (string.IsNullOrWhiteSpace(param.Id) || originData == null)
         {
             return "学生信息异常";
         }
 
-        if (student.ClassId != originData.ClassId)
+        if (param.ClassId != originData.ClassId)
         {
             originClazz.Total--;
-            var clazz = await _info.Clazz.FirstOrDefaultAsync(e => e.Id == student.ClassId);
+            var clazz = await _info.Clazz.FirstOrDefaultAsync(e => e.Id == param.ClassId);
             clazz.Total++;
         }
-        _info.Student.Update(student);
+        _mapper.Map(param, originData);
+        // _info.Student.Update(originData);
         // _info.Entry(student).State = EntityState.Modified;
         await _info.SaveChangesAsync();
         

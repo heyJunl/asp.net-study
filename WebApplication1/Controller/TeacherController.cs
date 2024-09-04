@@ -3,9 +3,11 @@
  * @Description:
  */
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 using WebApplication1.Dto;
 using WebApplication1.Entity;
 using WebApplication1.Service;
@@ -16,6 +18,7 @@ namespace WebApplication1.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Policy = "Permission")]
 public class TeacherController: ControllerBase
 {
     private readonly ITeacherService _teacherService;

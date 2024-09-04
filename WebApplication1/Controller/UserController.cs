@@ -3,6 +3,7 @@
  * @Description:
  */
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using WebApplication1.Dto;
@@ -15,6 +16,7 @@ namespace WebApplication1.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Policy = "Admins")]
 public class UserController: ControllerBase
 {
     private readonly IUserService _userService;
@@ -33,12 +35,14 @@ public class UserController: ControllerBase
         return Ok(await _userService.Add(user));
     }
 
+    [AllowAnonymous]
     [HttpPost("Login")]
     public async Task<ActionResult<string>> Login(User user)
     {
         return Ok(await _userService.Login(user));
     }
     
+    [AllowAnonymous]
     [HttpPost("Logout")]
     public async Task<ActionResult<string>> Logout()
     {

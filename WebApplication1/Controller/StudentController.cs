@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.DbContexts;
+using WebApplication1.Dto;
 using WebApplication1.Entity;
 using WebApplication1.Service;
 
@@ -29,13 +30,13 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost("Add")]
-    public async Task<ActionResult<String>> Add(Student student)
+    public async Task<ActionResult<string>> Add(Student student)
     {
         return Ok(await _studentService.Add(student));
     }
 
     [HttpPost("Update")]
-    public async Task<ActionResult<String>> Update(Student student)
+    public async Task<ActionResult<string>> Update(UpdateStudentDto student)
     {
         return Ok(await _studentService.Update(student));
     }

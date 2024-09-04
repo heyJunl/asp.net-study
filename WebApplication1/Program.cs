@@ -28,6 +28,7 @@ builder.Services.AddScoped<IStudentService, StudentServiceImpl>();
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddScoped<IClazzService, ClazzServiceImpl>();
 builder.Services.AddScoped<ITeacherService, TeacherServiceImpl>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddLogging(loggingBuilder =>
 {
     loggingBuilder.AddConsole(); // 添加控制台日志提供者
@@ -43,9 +44,10 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Student", policy => policy.RequireClaim("Permission", "3"));
     options.AddPolicy("Visitor", policy => policy.RequireClaim("Permission", "0"));
     // options.AddPolicy("User", policy => policy.RequireClaim("User"));
-    options.AddPolicy("Permission", policy => policy.RequireClaim("Permission"));
+    options.AddPolicy("Permission", policy => policy.RequireRole("Permission"));
     options.AddPolicy("User", policy => policy.RequireClaim("User"));
     options.AddPolicy("Role", policy => policy.RequireClaim("Role"));
+    options.AddPolicy("Test", policy => policy.RequireClaim("Permission"));
 
 
     // 设置默认策略
@@ -112,82 +114,82 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
 
         options.UseSecurityTokenValidators = true;
-        // 捕获并处理认证事件
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = context =>
-            {
-                var handler = new JwtSecurityTokenHandler();
-                var jwtToken = handler.ReadToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6InRlc3QiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiVXNlciI6IjEiLCJQZXJtaXNzaW9uIjoiUGVybWlzc2lvbiIsIm5iZiI6MTcyNDcyNzk1OSwiZXhwIjoxNzI0ODE0MzU5LCJpc3MiOiJoZXlKdW4iLCJhdWQiOiJoZXlKdW4ifQ.vP9Nvz-88RpNXXH4UaGNIAd0XTSbhhfRCqqpwpN9Vyo") as JwtSecurityToken;
-                if (jwtToken != null)
-                {
-                    Console.WriteLine(jwtToken.Claims.First(c => c.Type == JwtRegisteredClaimNames.Exp).Value);
-                }
-                var exception = context.Exception;
-            
-                if (exception is SecurityTokenExpiredException)
-                {
-                    context.Response.Headers.Add("Token-Expired", "true");
-                }
-                else if (exception is SecurityTokenInvalidSignatureException)
-                {
-                    context.Response.Headers.Add("Token-Invalid-Signature", "true");
-                }
-                else if (exception is SecurityTokenInvalidAudienceException)
-                {
-                    context.Response.Headers.Add("Token-Invalid-Audience", "true");
-                }
-                else if (exception is SecurityTokenInvalidIssuerException)
-                {
-                    context.Response.Headers.Add("Token-Invalid-Issuer", "true");
-                }
-                else if (exception is SecurityTokenNoExpirationException)
-                {
-                    context.Response.Headers.Add("Token-No-Expiration", "true");
-                }
-                else
-                {
-                    // 添加日志记录
-                    Console.WriteLine(exception.ToString(), "An unhandled exception occurred during authentication.");
-                }
-            
-                return Task.CompletedTask;
-            },
-            OnTokenValidated = context =>
-            {
-                var handler = new JwtSecurityTokenHandler();
-                var jwtToken = handler.ReadToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6InRlc3QiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiVXNlciI6IjEiLCJQZXJtaXNzaW9uIjoiUGVybWlzc2lvbiIsIm5iZiI6MTcyNDcyNzk1OSwiZXhwIjoxNzI0ODE0MzU5LCJpc3MiOiJoZXlKdW4iLCJhdWQiOiJoZXlKdW4ifQ.vP9Nvz-88RpNXXH4UaGNIAd0XTSbhhfRCqqpwpN9Vyo") as JwtSecurityToken;
-                if (jwtToken != null)
-                {
-                    Console.WriteLine(jwtToken.Claims.First(c => c.Type == JwtRegisteredClaimNames.Exp).Value);
-                }
-                
-                var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
-            
-                if (claimsIdentity != null && !claimsIdentity.HasClaim(c => c.Type == "required_claim"))
-                {
-                    context.Fail("Unauthorized"); // 如果校验失败，终止请求
-                }
-            
-                return Task.CompletedTask;
-            },
-            OnChallenge = context =>
-            {
-                // 自定义处理失败挑战的响应
-                context.HandleResponse();
-                context.Response.StatusCode = 401;
-                context.Response.ContentType = "application/json";
-
-                // 获取异常信息
-                var errorInfo = context.Error;
-                var errorDescription = context.ErrorDescription;
-
-                var result =
-                    JsonConvert.SerializeObject(new { error = errorInfo, error_description = errorDescription });
-                context.Response.WriteAsync(result);
-                return Task.CompletedTask;
-            }
-        };
+        // // 捕获并处理认证事件
+        // options.Events = new JwtBearerEvents
+        // {
+        //     OnAuthenticationFailed = context =>
+        //     {
+        //         var handler = new JwtSecurityTokenHandler();
+        //         var jwtToken = handler.ReadToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6InRlc3QiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiVXNlciI6IjEiLCJQZXJtaXNzaW9uIjoiUGVybWlzc2lvbiIsIm5iZiI6MTcyNDcyNzk1OSwiZXhwIjoxNzI0ODE0MzU5LCJpc3MiOiJoZXlKdW4iLCJhdWQiOiJoZXlKdW4ifQ.vP9Nvz-88RpNXXH4UaGNIAd0XTSbhhfRCqqpwpN9Vyo") as JwtSecurityToken;
+        //         if (jwtToken != null)
+        //         {
+        //             Console.WriteLine(jwtToken.Claims.First(c => c.Type == JwtRegisteredClaimNames.Exp).Value);
+        //         }
+        //         var exception = context.Exception;
+        //     
+        //         if (exception is SecurityTokenExpiredException)
+        //         {
+        //             context.Response.Headers.Add("Token-Expired", "true");
+        //         }
+        //         else if (exception is SecurityTokenInvalidSignatureException)
+        //         {
+        //             context.Response.Headers.Add("Token-Invalid-Signature", "true");
+        //         }
+        //         else if (exception is SecurityTokenInvalidAudienceException)
+        //         {
+        //             context.Response.Headers.Add("Token-Invalid-Audience", "true");
+        //         }
+        //         else if (exception is SecurityTokenInvalidIssuerException)
+        //         {
+        //             context.Response.Headers.Add("Token-Invalid-Issuer", "true");
+        //         }
+        //         else if (exception is SecurityTokenNoExpirationException)
+        //         {
+        //             context.Response.Headers.Add("Token-No-Expiration", "true");
+        //         }
+        //         else
+        //         {
+        //             // 添加日志记录
+        //             Console.WriteLine(exception.ToString(), "An unhandled exception occurred during authentication.");
+        //         }
+        //     
+        //         return Task.CompletedTask;
+        //     },
+        //     OnTokenValidated = context =>
+        //     {
+        //         var handler = new JwtSecurityTokenHandler();
+        //         var jwtToken = handler.ReadToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6InRlc3QiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiVXNlciI6IjEiLCJQZXJtaXNzaW9uIjoiUGVybWlzc2lvbiIsIm5iZiI6MTcyNDcyNzk1OSwiZXhwIjoxNzI0ODE0MzU5LCJpc3MiOiJoZXlKdW4iLCJhdWQiOiJoZXlKdW4ifQ.vP9Nvz-88RpNXXH4UaGNIAd0XTSbhhfRCqqpwpN9Vyo") as JwtSecurityToken;
+        //         if (jwtToken != null)
+        //         {
+        //             Console.WriteLine(jwtToken.Claims.First(c => c.Type == JwtRegisteredClaimNames.Exp).Value);
+        //         }
+        //         
+        //         var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+        //     
+        //         if (claimsIdentity != null && !claimsIdentity.HasClaim(c => c.Type == "required_claim"))
+        //         {
+        //             context.Fail("Unauthorized"); // 如果校验失败，终止请求
+        //         }
+        //     
+        //         return Task.CompletedTask;
+        //     },
+        //     OnChallenge = context =>
+        //     {
+        //         // 自定义处理失败挑战的响应
+        //         context.HandleResponse();
+        //         context.Response.StatusCode = 401;
+        //         context.Response.ContentType = "application/json";
+        //
+        //         // 获取异常信息
+        //         var errorInfo = context.Error;
+        //         var errorDescription = context.ErrorDescription;
+        //
+        //         var result =
+        //             JsonConvert.SerializeObject(new { error = errorInfo, error_description = errorDescription });
+        //         context.Response.WriteAsync(result);
+        //         return Task.CompletedTask;
+        //     }
+        // };
     });
 
 

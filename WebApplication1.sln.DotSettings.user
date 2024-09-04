@@ -5,7 +5,7 @@
   &lt;PhysicalFolder Path="C:\Users\BOB.L\.nuget\packages\xunit.dependencyinjection\9.3.1" Loaded="True" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\BOB.L\AppData\Local\JetBrains\Rider2024.1\resharper-host\temp\Rider\vAny\CoverageData\_WebApplication1.-1739441469\Snapshot\snapshot.utdcvr</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0af39cb4_002Dcdc5_002D42cb_002Db8c7_002D60594c9295ef/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Add #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0af39cb4_002Dcdc5_002D42cb_002Db8c7_002D60594c9295ef/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
@@ -53,7 +53,7 @@
     &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b4764087_002Dae2b_002D4507_002D82a7_002D44ed5af239e5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b4764087_002Dae2b_002D4507_002D82a7_002D44ed5af239e5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Add" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;

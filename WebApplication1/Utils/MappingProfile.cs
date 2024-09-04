@@ -21,7 +21,8 @@ public class MappingProfile : Profile
         CreateMap<ClazzUpdateDto, Clazz>().ReverseMap();
         CreateMap<TeacherPageDto, Teacher>().ReverseMap();
         CreateMap<ClazzPageVo, Clazz>().ReverseMap();
-
+        CreateMap<Student, UpdateStudentDto>().ReverseMap();
+        
         CreateMap<QueryResult, StudentClazzVo>();
         CreateMap<Clazz, StudentClazzVo>();
             // .ForMember(d => d.Grade, o => o.MapFrom(s => s.Grade))
