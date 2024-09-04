@@ -50,7 +50,8 @@ public class TeacherController: ControllerBase
     }
 
     [HttpPost("Query")]
-    public async Task<ActionResult<Teacher>> Query(string id)
+    public async Task<ActionResult<Teacher>> Query([FromForm] string id)
+
     {
         return Ok(await _teacherService.Query(id));
     }

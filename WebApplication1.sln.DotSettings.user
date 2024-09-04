@@ -10,6 +10,11 @@
     &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0d8403cf_002D2e2d_002D4a30_002D934b_002D75f60ea605bb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add #7" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=23a21978_002D0a22_002D46bb_002Da746_002Dad22e2cdc8b1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Page #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.ClazzServiceTest.Page&lt;/TestId&gt;&#xD;

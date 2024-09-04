@@ -4,6 +4,7 @@
  */
 
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using AutoFixture;
 using Microsoft.AspNetCore.Builder;
@@ -49,13 +50,21 @@ public class TeacherInterationTest : IClassFixture<WebApplicationFactory<Program
         // 查询 Query
         var teacherData = await _info.Teacher.Where(e=>e.Name == "Test01").FirstOrDefaultAsync();
         Assert.NotNull(teacherData);
-        var uriBuilder = new UriBuilder("http://localhost:5246/api/Teacher/Query");
-        uriBuilder.Query = $"id={teacherData.Id}";
-        var response2 = await client.PostAsync(uriBuilder.Uri, null);
-        Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
-        result = String2Dict(response2);
-        // Assert.Equal(result["value"]., );
+
+        // 设置请求头
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
         
+        var form = new MultipartFormDataContent();
+        form.Add(new StringContent(teacherData.Id),"id");
+        
+        var response2 = await client.PostAsync("/api/Teacher/Query", form);
+        
+        // var uriBuilder = new UriBuilder("http://localhost:5246/api/Teacher/Query");
+        // uriBuilder.Query = $"id={teacherData.Id}";
+        // var response2 = await client.PostAsync(uriBuilder.Uri, null);
+        Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
+
     }
 
     public static Dictionary<string, string> String2Dict(HttpResponseMessage response)
