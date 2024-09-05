@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using MinimalApis.Exception;
 using Newtonsoft.Json;
 using WebApplication1.DbContexts;
 using WebApplication1.Handler;
@@ -29,6 +30,7 @@ builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddScoped<IClazzService, ClazzServiceImpl>();
 builder.Services.AddScoped<ITeacherService, TeacherServiceImpl>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddLogging(loggingBuilder =>
 {
     loggingBuilder.AddConsole(); // 添加控制台日志提供者
@@ -114,6 +116,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
 
         options.UseSecurityTokenValidators = true;
+        options.Events = new JwtBearerEventHandler();
         // // 捕获并处理认证事件
         // options.Events = new JwtBearerEvents
         // {

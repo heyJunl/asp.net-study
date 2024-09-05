@@ -5,7 +5,7 @@
 
 namespace WebApplication1.Dto;
 
-public class ClazzAddDto
+public class AddClazzDto
 {
     public string? Grade { get; set; }
     public string? Number { get; set; }

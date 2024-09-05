@@ -62,7 +62,7 @@ public class InfoContext : DbContext
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
         CancellationToken cancellationToken = default)
     {
-        var httpContextAccessor = _accessor.HttpContext?.Request?.Headers["Authorization"];
+        var userId = _accessor.HttpContext?.Request?.Headers["Sid"].ToString();
         
         var entityEntries = ChangeTracker.Entries().ToList();
         foreach (var item in entityEntries)
@@ -70,11 +70,13 @@ public class InfoContext : DbContext
             if (item.State == EntityState.Added)
             {
                 Entry(item.Entity).Property(nameof(BaseData.CreateTime)).CurrentValue = DateTime.Now;
+                Entry(item.Entity).Property(nameof(BaseData.CreateBy)).CurrentValue = userId;
             }
 
             if (item.State == EntityState.Modified)
             {
                 Entry(item.Entity).Property(nameof(BaseData.UpdateTime)).CurrentValue = DateTime.Now;
+                Entry(item.Entity).Property(nameof(BaseData.UpdateBy)).CurrentValue = userId;
             }
         }
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);

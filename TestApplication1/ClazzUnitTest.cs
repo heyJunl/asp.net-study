@@ -42,7 +42,7 @@ public class ClazzUnitTest
     [Fact]
     public async Task AddClazz()
     {
-        var clz = _fixture.Create<ClazzAddDto>();
+        var clz = _fixture.Create<AddClazzDto>();
         var result = await _clazz.Add(clz);
         Assert.NotNull(result);
     }
@@ -63,7 +63,7 @@ public class ClazzUnitTest
     [Fact]
     public async Task Page()
     {
-        var page = new ClazzPageDto();
+        var page = new PageClazzDto();
         var result = await _clazz.Page(page);
         var clazzPageVo = result.Value.Data.ToList()[0];
         int count;
@@ -102,7 +102,7 @@ public class ClazzUnitTest
         var clz = await _info.Clazz.AsNoTracking().OrderByDescending(e => e.Id).ToListAsync().ConfigureAwait(false);
         Assert.NotNull(clz);
         var randomInt = new Random().Next(0, 11);
-        var dto = _mapper.Map<ClazzUpdateDto>(clz[0]);
+        var dto = _mapper.Map<AddClazzUpdateDto>(clz[0]);
         dto.Year = randomInt.ToString();
         var id = dto.Id;
         await _clazz.Update(dto);

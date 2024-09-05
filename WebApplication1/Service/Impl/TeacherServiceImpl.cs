@@ -55,14 +55,15 @@ public class TeacherServiceImpl : ITeacherService
         return "删除成功";
     }
 
-    public async Task<ActionResult<string>> Update(Teacher teacher)
+    public async Task<ActionResult<string>> Update(UpdateTeacherDto teacher)
     {
-        _info.Update(teacher);
+        var query = await _info.Teacher.FirstOrDefaultAsync(e=>e.Id == teacher.Id);
+        _mapper.Map(teacher, query);
         await _info.SaveChangesAsync();
         return "更新成功";
     }
 
-    public async Task<ActionResult<PaginatedResponse<Teacher>>> QueryTeacherPage(TeacherPageDto dto)
+    public async Task<ActionResult<PaginatedResponse<Teacher>>> QueryTeacherPage(PageTeacherDto dto)
     {
         var teacher = _mapper.Map<Teacher>(dto);
         var total = await _info.Teacher.CountAsync();

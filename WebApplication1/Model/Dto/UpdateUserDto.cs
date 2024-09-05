@@ -5,7 +5,7 @@
 
 namespace WebApplication1.Dto;
 
-public class UserUpdateDto
+public class UpdateUserDto
 {
  public string Id { get; set; }
  public string? Username { get; set; }

@@ -29,46 +29,46 @@ public class TeacherController: ControllerBase
     }
 
     [HttpPost("Add")]
-    public async Task<ActionResult<string>> Add(Teacher teacher)
+    public async Task<IResult> Add(Teacher teacher)
     {
-        return Ok(await _teacherService.Add(teacher));
+        return TypedResults.Ok(await _teacherService.Add(teacher));
     }
 
     [HttpPost("Delete")]
-    public async Task<ActionResult<string>> Delete(string id)
+    public async Task<IResult> Delete(string id)
     {
-        return Ok(await _teacherService.Delete(id));
+        return TypedResults.Ok(await _teacherService.Delete(id));
     }
 
     [HttpPost("Update")]
-    public async Task<ActionResult<string>> Update(Teacher teacher)
+    public async Task<IResult> Update(UpdateTeacherDto teacher)
     {
-        return Ok(await _teacherService.Update(teacher));
+        return TypedResults.Ok(await _teacherService.Update(teacher));
     }
 
     [HttpPost("Page")]
-    public async Task<ActionResult<PaginatedResponse<Teacher>>> Page(TeacherPageDto dto)
+    public async Task<IResult> Page(PageTeacherDto dto)
     {
-        return Ok(await _teacherService.QueryTeacherPage(dto));
+        return TypedResults.Ok(await _teacherService.QueryTeacherPage(dto));
     }
 
     [HttpPost("Query")]
-    public async Task<ActionResult<Teacher>> Query([FromForm] string id)
+    public async Task<IResult> Query([FromForm] string id)
 
     {
-        return Ok(await _teacherService.Query(id));
+        return TypedResults.Ok(await _teacherService.Query(id));
     }
 
     [HttpPost("EntrustWork")]
-    public async Task<ActionResult<string>> EntrustWork(string outId, string inId)
+    public async Task<IResult> EntrustWork(string outId, string inId)
     {
         
-        return Ok(await _teacherService.EntrustWork(outId, inId));
+        return TypedResults.Ok(await _teacherService.EntrustWork(outId, inId));
     }
     
     [HttpPost("ChargedWork")]
-    public async Task<ActionResult<List<StudentClazzVo>>> ChargedWork(string id)
+    public async Task<IResult> ChargedWork(string id)
     {
-        return Ok(await _teacherService.ChargedWork(id));
+        return TypedResults.Ok(await _teacherService.ChargedWork(id));
     }
 }

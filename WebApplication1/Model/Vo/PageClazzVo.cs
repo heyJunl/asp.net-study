@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace WebApplication1.Vo;
 
-public class ClazzPageVo
+public class PageClazzVo
 {
     public string id { get; set; }
     public string? Grade { get; set; }

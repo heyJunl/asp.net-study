@@ -11,9 +11,9 @@ public interface ITeacherService
 
     public Task<ActionResult<string>> Delete(string id);
 
-    public Task<ActionResult<string>> Update(Teacher teacher);
+    public Task<ActionResult<string>> Update(UpdateTeacherDto teacher);
 
-    public Task<ActionResult<PaginatedResponse<Teacher>>> QueryTeacherPage(TeacherPageDto dto);
+    public Task<ActionResult<PaginatedResponse<Teacher>>> QueryTeacherPage(PageTeacherDto dto);
 
     public Task<ActionResult<Teacher>> Query(string id);
 

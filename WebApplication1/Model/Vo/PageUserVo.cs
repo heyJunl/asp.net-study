@@ -7,7 +7,7 @@ using WebApplication1.Entity;
 
 namespace WebApplication1.Vo;
 
-public class UserPageVo
+public class PageUserVo
 {
     public string Id { get; set; }
     public string Username { get; set; }
@@ -15,7 +15,7 @@ public class UserPageVo
     public int State { get; set; }
 
 
-    public UserPageVo()
+    public PageUserVo()
     {
         
     }

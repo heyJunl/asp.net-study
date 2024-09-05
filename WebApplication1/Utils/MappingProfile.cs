@@ -14,14 +14,15 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<User, UserPageVo>().ReverseMap();
-        CreateMap<User, UserUpdateDto>().ReverseMap();
-        CreateMap<ClazzAddDto, Clazz>().ReverseMap();
-        CreateMap<ClazzPageDto, Clazz>().ReverseMap();
-        CreateMap<ClazzUpdateDto, Clazz>().ReverseMap();
-        CreateMap<TeacherPageDto, Teacher>().ReverseMap();
-        CreateMap<ClazzPageVo, Clazz>().ReverseMap();
+        CreateMap<User, PageUserVo>().ReverseMap();
+        CreateMap<User, UpdateUserDto>().ReverseMap();
+        CreateMap<AddClazzDto, Clazz>().ReverseMap();
+        CreateMap<PageClazzDto, Clazz>().ReverseMap();
+        CreateMap<AddClazzUpdateDto, Clazz>().ReverseMap();
+        CreateMap<PageTeacherDto, Teacher>().ReverseMap();
+        CreateMap<PageClazzVo, Clazz>().ReverseMap();
         CreateMap<Student, UpdateStudentDto>().ReverseMap();
+        CreateMap<UpdateTeacherDto, Teacher>().ReverseMap();
         
         CreateMap<QueryResult, StudentClazzVo>();
         CreateMap<Clazz, StudentClazzVo>();

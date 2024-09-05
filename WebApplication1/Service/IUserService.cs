@@ -14,13 +14,13 @@ public interface IUserService
     public Task<ActionResult<string>> Login(User user);
 
     // 分页查询，根据username，permission，state模糊查询
-    public Task<ActionResult<PaginatedResponse<UserPageVo>>> QueryUserPage(QueryUserPage queryUserPage);
+    public Task<ActionResult<PaginatedResponse<PageUserVo>>> QueryUserPage(QueryUserPage queryUserPage);
 
     // 修改用户信息
-    public Task<ActionResult<string>> Update(UserUpdateDto userUpdateDto);
+    public Task<ActionResult<string>> Update(UpdateUserDto updateUserDto);
 
     // 冻结用户
     public Task<ActionResult<string>> Delete(string id);
 
-    public Task<ActionResult<UserPageVo>> QueryById(string id);
+    public Task<ActionResult<PageUserVo>> QueryById(string id);
 }

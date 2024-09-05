@@ -30,48 +30,48 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost("Add")]
-    public async Task<ActionResult<string>> Add(Student student)
+    public async Task<IResult> Add(Student student)
     {
-        return Ok(await _studentService.Add(student));
+        return TypedResults.Ok(await _studentService.Add(student));
     }
 
     [HttpPost("Update")]
-    public async Task<ActionResult<string>> Update(UpdateStudentDto student)
+    public async Task<IResult> Update(UpdateStudentDto student)
     {
-        return Ok(await _studentService.Update(student));
+        return TypedResults.Ok(await _studentService.Update(student));
     }
 
     [HttpDelete("Delete")]
-    public async Task<ActionResult<string>> Delete(string id)
+    public async Task<IResult> Delete(string id)
     {
-        return Ok(await _studentService.Delete(id));
+        return TypedResults.Ok(await _studentService.Delete(id));
     }
 
     [HttpPost("Query")]
-    public async Task<ActionResult<IEnumerable<Student>>> Query()
+    public async Task<IResult> Query()
     {
         // return Ok(await _info.Student.ToListAsync());
-        return Ok(await _studentService.Query());
+        return TypedResults.Ok(await _studentService.Query());
     }
 
     [HttpPost("QueryById")]
     [Authorize(Policy = "Permission")]
     // [Authorize(Roles = "Permission")]
-    public async Task<ActionResult<Student>> QueryById(string id)
+    public async Task<IResult> QueryById(string id)
     {
-        return Ok(await _studentService.QueryById(id));
+        return TypedResults.Ok(await _studentService.QueryById(id));
     }
 
     [HttpPost("Page")]
-    public async Task<ActionResult<PaginatedResponse<Student>>> Page(Student student)
+    public async Task<IResult> Page(Student student)
     {
-        return Ok(await _studentService.Page(student));
+        return TypedResults.Ok(await _studentService.Page(student));
     }
 
     [HttpPost("QueryClassmate")]
-    public async Task<ActionResult<Student>> QueryClassmate(string id)
+    public async Task<IResult> QueryClassmate(string id)
     {
-        return Ok(await _studentService.QueryClassmate(id));
+        return TypedResults.Ok(await _studentService.QueryClassmate(id));
     }
 
     

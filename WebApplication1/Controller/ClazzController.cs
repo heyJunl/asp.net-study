@@ -28,50 +28,50 @@ public class ClazzController : ControllerBase
      * 添加班级
      */
     [HttpPost("Add")]
-    public async Task<ActionResult<string>> Add(ClazzAddDto clazz)
+    public async Task<IResult> Add(AddClazzDto addClazz)
     {
-        return Ok(await _clazzService.Add(clazz));
+        return TypedResults.Ok(await _clazzService.Add(addClazz));
     }
 
     /**
      * 冻结班级
      */
     [HttpPost("Delete")]
-    public async Task<ActionResult<string>> Delete(string id)
+    public async Task<IResult> Delete(string id)
     {
-        return Ok(await _clazzService.Delete(id));
+        return TypedResults.Ok(await _clazzService.Delete(id));
     }
 
     /**
      * 分页模糊查询
      */
     [HttpPost("Page")]
-    public async Task<ActionResult<PaginatedResponse<ClazzPageVo>>> Page(ClazzPageDto dto)
+    public async Task<IResult> Page(PageClazzDto dto)
     {
-        return Ok(await _clazzService.Page(dto));
+        return TypedResults.Ok(await _clazzService.Page(dto));
     }
     
     /**
      * 更新班级信息
      */
     [HttpPost("Update")]
-    public async Task<ActionResult<string>> Update(ClazzUpdateDto clazz)
+    public async Task<IResult> Update(AddClazzUpdateDto addClazz)
     {
-        return Ok(await _clazzService.Update(clazz));
+        return TypedResults.Ok(await _clazzService.Update(addClazz));
     }
 
     /**
      * 查询班级信息
      */
     [HttpPost("Query")]
-    public async Task<ActionResult<Clazz>> Query(string id)
+    public async Task<IResult> Query(string id)
     {
-        return Ok(await _clazzService.Query(id));
+        return TypedResults.Ok(await _clazzService.Query(id));
     }
 
     [HttpPost("QueryGradeStudent")]
-    public async Task<ActionResult<List<GradeStudentVo>>> QueryClazzStudent(string clazzId)
+    public async Task<IResult> QueryClazzStudent(string clazzId)
     {
-        return Ok(await _clazzService.QueryClazzStudent(clazzId));
+        return TypedResults.Ok(await _clazzService.QueryClazzStudent(clazzId));
     }
 }

@@ -3,9 +3,11 @@
  * @Description:
  */
 
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using MinimalApis.Exception;
 using WebApplication1.Dto;
 using WebApplication1.Entity;
 using WebApplication1.Service;
@@ -30,60 +32,60 @@ public class UserController: ControllerBase
     }
 
     [HttpPost("Add")]
-    public async Task<ActionResult<string>> Add(User user)
+    public async Task<IResult> Add(User user)
     {
-        return Ok(await _userService.Add(user));
+        return TypedResults.Ok(await _userService.Add(user));
     }
 
     [AllowAnonymous]
     [HttpPost("Login")]
-    public async Task<ActionResult<string>> Login(User user)
+    public async Task<IResult> Login(User user)
     {
-        return Ok(await _userService.Login(user));
+        return TypedResults.Ok(await _userService.Login(user));
     }
     
     [AllowAnonymous]
     [HttpPost("Logout")]
-    public async Task<ActionResult<string>> Logout()
+    public async Task<IResult> Logout()
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString();
         if (String.IsNullOrWhiteSpace(token))
         {
-            return "请携带Token";
+            throw new CustomException(HttpStatusCode.InternalServerError.GetHashCode(), "请携带Token");
         }
 
         string[] tokenList = token.Split(" ");
         if (tokenList.Length != 2 || String.IsNullOrWhiteSpace(tokenList[1]))
         {
-            return "无效的Token";
+            throw new CustomException(HttpStatusCode.InternalServerError.GetHashCode(), "无效的Token");
         }
         token = "TOKEN_" + tokenList[1];
         _redis.GetDatabase().KeyDelete(token);
-        return Ok("删除成功！");
+        return TypedResults.Ok("删除成功！");
     }
 
     [HttpPost("Page")]
-    public async Task<ActionResult<PaginatedResponse<UserPageVo>>> Page(QueryUserPage queryUserPage)
+    public async Task<IResult> Page(QueryUserPage queryUserPage)
     {
-        return Ok(await _userService.QueryUserPage(queryUserPage));
+        return TypedResults.Ok(await _userService.QueryUserPage(queryUserPage));
     }
 
     [HttpPost("Update")]
-    public async Task<ActionResult<string>> Update(UserUpdateDto dto)
+    public async Task<IResult> Update(UpdateUserDto dto)
     {
-        return Ok(await _userService.Update(dto));
+        return TypedResults.Ok(await _userService.Update(dto));
     }
 
     [HttpPost("Delete")]
-    public async Task<ActionResult<string>> Delete(string id)
+    public async Task<IResult> Delete(string id)
     {
-        return Ok(await _userService.Delete(id));
+        return TypedResults.Ok(await _userService.Delete(id));
     }
 
     [HttpPost("QueryById")]
-    public async Task<ActionResult<UserPageVo>> QueryById(string id)
+    public async Task<IResult> QueryById(string id)
     {
-        return Ok(await _userService.QueryById(id));
+        return TypedResults.Ok(await _userService.QueryById(id));
     }
     
     

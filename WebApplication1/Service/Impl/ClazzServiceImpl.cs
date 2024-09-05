@@ -27,9 +27,9 @@ public class ClazzServiceImpl: IClazzService
         this._mapper = mapper;
     }
 
-    public async Task<ActionResult<string>> Add(ClazzAddDto clazz)
+    public async Task<ActionResult<string>> Add(AddClazzDto addClazz)
     {
-        var result = _mapper.Map<Clazz>(clazz);
+        var result = _mapper.Map<Clazz>(addClazz);
         await _info.Clazz.AddAsync(result);
         await _info.SaveChangesAsync();
         return "添加成功";
@@ -47,7 +47,7 @@ public class ClazzServiceImpl: IClazzService
         return "删除成功";
     }
 
-    public async Task<ActionResult<PaginatedResponse<ClazzPageVo>>> Page(ClazzPageDto dto)
+    public async Task<ActionResult<PaginatedResponse<PageClazzVo>>> Page(PageClazzDto dto)
     {
         var totalCount = await _info.Clazz.CountAsync();
         var page = new PageParam(dto.PageNo.Value, dto.PageSize.Value, totalCount);
@@ -55,20 +55,19 @@ public class ClazzServiceImpl: IClazzService
         IQueryable<Clazz> wrapper = WrapperConstruct(dto);
         var clazzList = await wrapper.Skip((page.PageNo.Value - 1) * page.PageSize.Value).Take(page.PageSize.Value)
             .OrderBy(e => e.CreateTime).ToListAsync();
-        var result = _mapper.Map<List<ClazzPageVo>>(clazzList);
-        return new PaginatedResponse<ClazzPageVo>(result, page);
+        var result = _mapper.Map<List<PageClazzVo>>(clazzList);
+        return new PaginatedResponse<PageClazzVo>(result, page);
     }
 
-    public async Task<ActionResult<string>> Update(ClazzUpdateDto dto)
+    public async Task<ActionResult<string>> Update(AddClazzUpdateDto dto)
     {
-        var clazz = _mapper.Map<Clazz>(dto);
-        var x = await _info.Clazz.AsNoTracking().FirstOrDefaultAsync(e => e.Id == clazz.Id);
-        if (x ==null)
+        var resource = await _info.Clazz.FirstOrDefaultAsync(e => e.Id == dto.Id);
+        if (resource ==null)
         {
             throw new Exception("班级不存在");
         }
-        clazz.Total = x.Total;
-        _info.Update(clazz);
+
+        _mapper.Map(dto, resource);
         await _info.SaveChangesAsync();
         return "更新成功";
 

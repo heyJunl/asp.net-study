@@ -32,7 +32,7 @@ public class JwtUtils
             audience: _configuration["Jwt:Audience"],
             claims: new List<Claim>
             {
-                new Claim(ClaimTypes.Sid, user.Id),
+                new Claim("Sid", user.Id),
                 new Claim(ClaimTypes.Role, "Permission"),
                 new Claim("Permission", user.Permission.ToString()),
                 

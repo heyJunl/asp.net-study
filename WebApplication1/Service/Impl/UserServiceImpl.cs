@@ -79,7 +79,7 @@ public class UserServiceImpl : IUserService
     }
 
 
-    public async Task<ActionResult<PaginatedResponse<UserPageVo>>> QueryUserPage(QueryUserPage query)
+    public async Task<ActionResult<PaginatedResponse<PageUserVo>>> QueryUserPage(QueryUserPage query)
     {
         var totalCount = await _info.User.CountAsync();
         var page = new PageParam(query.PageNo.Value, query.PageSize.Value, totalCount);
@@ -101,11 +101,11 @@ public class UserServiceImpl : IUserService
 
         List<User> listAsync = await wrapper.Skip((page.PageNo.Value - 1) * page.PageSize.Value)
             .Take(page.PageSize.Value).OrderBy(e => e.CreateTime).ToListAsync();
-        List<UserPageVo> result = _mapper.Map<List<UserPageVo>>(listAsync);
-        return new PaginatedResponse<UserPageVo>(result, page);
+        List<PageUserVo> result = _mapper.Map<List<PageUserVo>>(listAsync);
+        return new PaginatedResponse<PageUserVo>(result, page);
     }
 
-    public async Task<ActionResult<String>> Update(UserUpdateDto dto)
+    public async Task<ActionResult<String>> Update(UpdateUserDto dto)
     {
         var result = await _info.User.AsNoTracking()
             .FirstOrDefaultAsync(e => e.Id == dto.Id);
@@ -157,7 +157,7 @@ public class UserServiceImpl : IUserService
     }
 
 
-    public async Task<ActionResult<UserPageVo>> QueryById(string id)
+    public async Task<ActionResult<PageUserVo>> QueryById(string id)
     {
         var user = await _info.User.FirstOrDefaultAsync(e => e.Id == id);
         if (user == null)
@@ -165,7 +165,7 @@ public class UserServiceImpl : IUserService
             throw new ArgumentException("用户不存在");
         }
 
-        var result = _mapper.Map<UserPageVo>(user);
+        var result = _mapper.Map<PageUserVo>(user);
         return result;
     }
 

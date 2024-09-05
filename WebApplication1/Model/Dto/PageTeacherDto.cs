@@ -7,7 +7,7 @@ using WebApplication1.Entity;
 
 namespace WebApplication1.Dto;
 
-public class TeacherPageDto: PageParam
+public class PageTeacherDto: PageParam
 {
     public string? Id { get; set; }
     public string? Name { get; set; }
