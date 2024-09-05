@@ -31,3 +31,4 @@ C:\Users\BOB.L\Desktop\Project\MinimalApis\MinimalApis\obj\Debug\net8.0\refint\M
 C:\Users\BOB.L\Desktop\Project\MinimalApis\MinimalApis\obj\Debug\net8.0\MinimalApis.pdb
 C:\Users\BOB.L\Desktop\Project\MinimalApis\MinimalApis\obj\Debug\net8.0\MinimalApis.genruntimeconfig.cache
 C:\Users\BOB.L\Desktop\Project\MinimalApis\MinimalApis\obj\Debug\net8.0\ref\MinimalApis.dll
+C:\Users\BOB.L\Desktop\Project\MinimalApis\MinimalApis\obj\Debug\net8.0\MinimalApis.sourcelink.json

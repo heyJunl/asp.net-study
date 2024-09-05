@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MinimalApis;
 using MinimalApis.EndPoints;
+using MinimalApis.Exception;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+builder.Services.AddExceptionHandler<SystemExceptionHandle>();
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -30,6 +33,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseMiddleware<ResponseWrapperMiddleware>();
+app.UseExceptionHandler();
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -77,7 +81,10 @@ app.MapGet("/IResult/ProblemDetail", () =>
     return TypedResults.Problem(problemDetail);
 });
 
-
+app.MapGet("/CustomThrow", () =>
+{
+    throw new CustomException(StatusCodes.Status403Forbidden, "无权限");
+}).WithOpenApi();
 
 app.RegisterEndPoints();
 app.Run();
