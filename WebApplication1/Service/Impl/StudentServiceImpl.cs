@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MinimalApis.Exception;
 using WebApplication1.DbContexts;
 using WebApplication1.Dto;
 using WebApplication1.Entity;
@@ -29,7 +30,7 @@ public class StudentServiceImpl : IStudentService
         var clazz = await _info.Clazz.FirstOrDefaultAsync(e => e.Id == student.ClassId);
         if (clazz == null)
         {
-            throw new Exception("班级信息异常");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "班级信息异常");
         }
         _info.Student.Add(student);
         clazz.Total++;
@@ -44,12 +45,12 @@ public class StudentServiceImpl : IStudentService
         
         if (originData == null || string.IsNullOrWhiteSpace(param.Id))
         {
-            throw new Exception("学生信息异常");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "学生信息异常");
         }
         var originClazz = await _info.Clazz.FirstOrDefaultAsync(e => e.Id == originData.ClassId);
         if (originClazz == null || string.IsNullOrWhiteSpace(originData.ClassId))
         {
-            throw new Exception("班级信息异常");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "班级信息异常");
         }
 
         if (string.IsNullOrWhiteSpace(param.Id) || originData == null)
@@ -77,7 +78,7 @@ public class StudentServiceImpl : IStudentService
         var student = await _info.Student.FirstOrDefaultAsync(e=>e.Id==id);
         if (student == null)
         {
-            throw new Exception("学生信息异常！");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "学生信息异常！");
         }
         var clazz = await _info.Clazz.FirstOrDefaultAsync(e => e.Id==student.ClassId);
         clazz.Total--;
@@ -101,7 +102,7 @@ public class StudentServiceImpl : IStudentService
     {
         if (string.IsNullOrWhiteSpace(id))
         {
-            throw new ArgumentNullException("id不能为空！");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "id不能为空！");
         }
 
         return await _info.Student.FindAsync(id);
@@ -134,7 +135,7 @@ public class StudentServiceImpl : IStudentService
             return new PaginatedResponse<Student>(students, page);
         }
 
-        throw new ArgumentNullException("请输入分页参数！");
+        throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "请输入分页参数！");
     }
 
     public async Task<ActionResult<List<Student>>> QueryClassmate(string id)
@@ -142,7 +143,7 @@ public class StudentServiceImpl : IStudentService
         var student = _info.Student.FirstOrDefaultAsync(e => e.Id == id);
         if (student.Result == null)
         {
-            throw new Exception("学生不存在！");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "学生不存在！");
         }
         var list = _info.Student.Where(e => e.ClassId == student.Result.ClassId).ToListAsync();
         return list.Result;

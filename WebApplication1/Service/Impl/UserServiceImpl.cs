@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MinimalApis.Exception;
 using Newtonsoft.Json;
 using WebApplication1.Common.Enums;
 using WebApplication1.DbContexts;
@@ -38,7 +39,7 @@ public class UserServiceImpl : IUserService
     {
         if (_info.User.FirstOrDefaultAsync(e => e.Username == user.Username).Result != null)
         {
-            throw new Exception("用户名已存在");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "用户名已存在");
         }
 
         var salt = GenerateSalt();
@@ -54,7 +55,7 @@ public class UserServiceImpl : IUserService
         var userInfo = _info.User.FirstOrDefaultAsync(e => e.Username == user.Username).Result;
         if (userInfo == null)
         {
-            throw new Exception("用户名不存在");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "用户名不存在");
         }
 
         byte[] salt = Convert.FromBase64String(userInfo.Salt);
@@ -148,7 +149,7 @@ public class UserServiceImpl : IUserService
         var user = await _info.User.FirstOrDefaultAsync(e => e.Id == id);
         if (user == null)
         {
-            throw new ArgumentException("用户不存在");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "用户不存在");
         }
 
         user.State = StateType.DEACTIVATE.GetHashCode();
@@ -162,7 +163,7 @@ public class UserServiceImpl : IUserService
         var user = await _info.User.FirstOrDefaultAsync(e => e.Id == id);
         if (user == null)
         {
-            throw new ArgumentException("用户不存在");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "用户不存在");
         }
 
         var result = _mapper.Map<PageUserVo>(user);

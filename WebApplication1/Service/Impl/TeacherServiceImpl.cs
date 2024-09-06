@@ -8,6 +8,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MinimalApis.Exception;
 using WebApplication1.Common.Enums;
 using WebApplication1.DbContexts;
 using WebApplication1.Dto;
@@ -40,13 +41,13 @@ public class TeacherServiceImpl : ITeacherService
         var teacher = await _info.Teacher.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
         if (teacher == null)
         {
-            throw new Exception("教师Id不存在");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "教师Id不存在");
         }
 
         var clazzNumber = await _info.Clazz.FirstOrDefaultAsync(e => e.TeacherId == id);
         if (clazzNumber != null)
         {
-            throw new Exception("请完成老师交接工作后操作（对应班级更换老师）");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "请完成老师交接工作后操作（对应班级更换老师）");
         }
 
         teacher.State = StateType.DEACTIVATE.GetHashCode();
@@ -94,7 +95,7 @@ public class TeacherServiceImpl : ITeacherService
         var teacher = await _info.Teacher.FirstOrDefaultAsync(e => e.Id == id);
         if (teacher == null)
         {
-            throw new Exception("教师Id不存在");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "教师Id不存在");
         }
 
         return teacher;
@@ -105,7 +106,7 @@ public class TeacherServiceImpl : ITeacherService
         var check = _info.Teacher.Where(e=>e.Id==outId || e.Id == inId).ToListAsync();
         if (check.Result.Count != 2)
         {
-            throw new Exception("请确认双方信息是否正确");
+            throw new CustomException(StatusCodes.Status400BadRequest.GetHashCode(), "请确认双方信息是否正确");
         }
         
         var clazzInfo = _info.Clazz.Where(e => e.TeacherId == outId).ToListAsync().Result;
