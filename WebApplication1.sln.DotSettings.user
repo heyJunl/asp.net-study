@@ -48,12 +48,12 @@
     &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.ClazzServiceTest.QueryByGrade&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7bfa2f53_002D2c3c_002D44e8_002D9327_002D16be1e4f5707/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7bfa2f53_002D2c3c_002D44e8_002D9327_002D16be1e4f5707/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Add #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b4764087_002Dae2b_002D4507_002D82a7_002D44ed5af239e5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Add" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b4764087_002Dae2b_002D4507_002D82a7_002D44ed5af239e5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Add" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B212C441-205C-4457-9BF7-9DFB458E0873::net8.0::TestApplication1.TeacherInterationTest.Add&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;

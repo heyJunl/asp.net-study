@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "z+NH+CZ3EyiO/IGsnTKMxtazPAbbaSWc+qBQofWqiNwt++NQ8kwm55RDR1FSA60aI49NblcF21+5uguUe/pItQ==",
+  "dgSpecHash": "wRCygExrKMwU03zqm8sLjTVkzGI76mXm8PVhZOAfgbm3oeqpVhWTco5+rQWbgqvLOSYgrGPcZaNfRH2RgkteSg==",
   "success": true,
   "projectFilePath": "C:\\Users\\BOB.L\\Desktop\\Project\\WebApplication1\\TestApplication1\\TestApplication1.csproj",
   "expectedPackageFiles": [
@@ -166,6 +166,12 @@
     "C:\\Users\\BOB.L\\.nuget\\packages\\xunit.runner.visualstudio\\2.5.3\\xunit.runner.visualstudio.2.5.3.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "NU1803",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "You are running the 'restore' operation with an 'HTTP' source, 'http://nuget.sjfood.us/nuget'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source."
+    },
     {
       "code": "NU1608",
       "level": "Warning",
