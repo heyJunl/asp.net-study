@@ -124,6 +124,29 @@ var user = new User();
 User user2 = new();
 ```
 
+## 索引
+
+^类似于取反，..类似于python中的:，可以切片。[String](https://learn.microsoft.com/zh-cn/dotnet/api/system.string)、[Span](https://learn.microsoft.com/zh-cn/dotnet/api/system.span-1) 和 [ReadOnlySpan](https://learn.microsoft.com/zh-cn/dotnet/api/system.readonlyspan-1)。[List](https://learn.microsoft.com/zh-cn/dotnet/api/system.collections.generic.list-1) 支持索引，但不支持范围。
+
+**在数组中获取范围是从初始数组复制的数组而不是引用的数组，修改生成的值不会更改数组中的值**
+
+```C#
+string[] words = [
+    // index from start    index from end
+    "The",      // 0                   ^9
+    "quick",    // 1                   ^8
+    "brown",    // 2                   ^7
+];
+// brown
+Console.WriteLine(words[^1]);
+// uick
+Console.WriteLine(words[1][1..]);
+// ui
+Console.WriteLine(words[1][1..3]);
+// brown
+Console.WriteLine(words[words.Length - 1]);
+```
+
 
 
 ## Base
@@ -324,6 +347,268 @@ int? myInt = null;
 if (!myInt.HasValue) {}
 int defaultInt = myInt ?? 0;	// 使用？？运算符提供默认值
 ```
+
+
+
+## LINQ
+
+### Where
+
+从数据源中筛选出元素
+
+```C#
+from city in cities where city.Pop is < 200 and >100 select city;
+```
+
+### 排序
+
+#### OrderBy
+
+可按升序或降序排列，例子中以Area为主，population为辅
+
+```C#
+var orderedEnumerable = from country in countries 
+    orderby country.Area, country.Population descending select country;
+```
+
+#### ThenBy
+
+按升序执行次要排序
+
+#### Reverse
+
+反转集合中的元素
+
+
+
+### Join
+
+将数据源中元素于另一个数据源元素进行关联和/或合并，连接序列之后必须使用select或group语句指定存储在输入序列中的元素。示例关联Category属性与categories字符串数组中一个类别匹配的prod对象
+
+```C#
+var cateQuery = from cat in categories
+            join prod in products on cat equals prod.Category
+            select new
+            {
+                Category = cat,
+                Name = prod.Name
+            };
+```
+
+### Let
+
+使用let将结果存储在新范围变量中
+
+```C#
+from name in names select names 
+    let firstName = name.Split(" ")[0]
+    select firstName；
+```
+
+### 多查询
+
+```C#
+var query = from student in students
+            // 按照student.Year分组
+            group student by student.Year
+            // 为分组定义别名，后续使用别名进行分组
+            into studentGroup
+            select new
+            {   // 每个分组的键，学生的年级
+                Level = studentGroup.Key,
+                // 每个分组中，所有学生的平均成绩
+                HighestScore = (from student2 in studentGroup select student2.ExamScores.Average()).Max()
+            };
+```
+
+### 查询对象
+
+```c#
+var entity = from o in InComingOrders
+    where o.OrderSize > 5
+    select new Customer { Name = o.Name, Phone = o.Phone };
+// LINQ写法
+var entity2 = InComingOrders.Where(e => e.OrderSize > 5)
+    .Select(e => new Customer { Name = e.Name, Phone = e.Phone });
+```
+
+### 作为数据表达式（Lambda）
+
+结合out关键字返回查询
+
+```C#
+void QueryMethod(int[] ints, out List<string> returnQ) =>
+            returnQ = (from i in ints where i < 4 select i.ToString()).ToList();
+
+int[] nums = [0, 1, 2, 3, 4, 5, 6, 7];
+QueryMethod(nums, out List<string> result);
+foreach (var item in result)
+{
+    Console.WriteLine(item);
+}
+```
+
+#### eg
+
+```C#
+// 普通方法编写查询总分数据
+var studentQuery1 = from student in studnets
+    let totalScore = student.Scores[0] + student.Scores[1] + student.Scores[2] + student.Scores[3]
+    select totalScore;
+// 使用Linq方法编写查询总分数据
+var studentQuery2 = studnets.Select(e => e.Scores[0] + e.Scores[1] + e.Scores[2] + e.Scores[3]);
+// 统计平均分
+double average = studentQuery1.Average();
+
+// 将大于平均分的学生数据映射为对象
+var query1 =
+    from student in studnets
+    let x = student.Scores[0] + student.Scores[1] +
+            student.Scores[2] + student.Scores[3]
+    where x > average
+    select new { id = student.ID, score = x };
+// 使用Linq写法
+var query2 = studnets.Where(e => e.Scores[0] + e.Scores[1] + e.Scores[2] + e.Scores[3] > average).Select(e =>
+    new { id = e.ID, score = e.Scores[0] + e.Scores[1] + e.Scores[2] + e.Scores[3] });
+// Linq简洁写法
+var query3 = studnets.Select(e => new { id = e.ID, score = e.Scores[0] + e.Scores[1] + e.Scores[2] + e.Scores[3] })
+    .Where(e => e.score > average);
+
+
+foreach (var item in query1)
+{
+    Console.WriteLine("Student ID: {0},Score: {1}", item.id, item.score);
+}
+```
+
+### 投影运算
+
+#### SelectMany
+
+多个from子句投影字符串列表中每个字符串中的单词
+
+```C#
+List<string> phrases = ["an apple a day", "the quick brown fox"];
+// 普通写法
+var query = from phrase in phrases from word in phrase.Split(' ') select word;
+// Linq写法
+var query2 = phrases.SelectMany(e => e.Split(' '));
+```
+
+### Zip列表压缩元组，类似python
+
+```c#
+// An int array with 7 elements.
+IEnumerable<int> numbers = [1, 2, 3, 4, 5, 6, 7];
+// A char array with 6 elements.
+IEnumerable<char> letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+// A string array with 8 elements.
+IEnumerable<string> emoji = [ "🤓", "🔥", "🎉", "👀", "⭐", "💜", "✔", "💯"];
+
+foreach (var (first, second, third) in numbers.Zip(letters, emoji))
+{
+    Console.WriteLine($"Number:{first} is zipped with letter: {second} and emoji {third}");
+}
+```
+
+### Set集合操作
+
+#### 去重
+
+```C#
+string[] words = ["the", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog"];
+// 去重
+var query = from word in words.Distinct() select word;
+// 根据条件去重
+var query2 = from word in words.DistinctBy(e => e.Length)select word;
+```
+
+#### 差集
+
+```C#
+string[] words1 = ["the", "quick", "brown", "fox"];
+string[] words2 = ["jumped", "over", "the", "lazy", "dog"];
+// console：queik、brown、fox，输出1在2中没有的元素
+IEnumerable<string> query = from word in words1.Except(words2) select word;
+// expectBy同理，根据自定义字段进行操作
+var result = new List<Person> { new Person { Name = "Alice" }, new Person { Name = "Bob" } }
+                            .ExceptBy(person => person.Name,
+                                     new List<Person> { new Person { Name = "Alice" }, new Person { Name = "Charlie" } });
+// result 将包含 { new Person { Name = "Bob" } }，因为 "Alice" 在两个集合中都存在，而 "Bob" 和 "Charlie" 只在第一个集合中。
+```
+
+#### 交集
+
+```C#
+string[] words1 = ["the", "quick", "brown", "fox"];
+string[] words2 = ["jumped", "over", "the", "lazy", "dog"];
+// 输出the
+IEnumerable<string> query = from word in words1.Intersect(words2) select word;
+var list = words1.Intersect(words2).Select(e => e.ToUpper()).ToList();
+// 通过比较名称生成 Teacher 和 Student 的交集
+(Student person in
+    students.IntersectBy(
+        teachers.Select(t => (t.First, t.Last)), s => (s.FirstName, s.LastName)))
+```
+
+#### 并集
+
+```C#
+string[] words1 = ["the", "quick", "brown", "fox"];
+string[] words2 = ["jumped", "over", "the", "lazy", "dog"];
+// 使用UnionBy
+(var person in
+    students.Select(s => (s.FirstName, s.LastName)).UnionBy(
+        teachers.Select(t => (FirstName: t.First, LastName: t.Last)), s => (s.FirstName, s.LastName)))
+// 输出：the quick brown fox jumped over lazy dog
+var query = (from word in words1.Union(words2) select word).ToList();
+var list = words1.Union(words2).ToList();
+```
+
+### 限定符
+
+- All()：所有
+- Any():任何
+- Contains():正好
+
+```
+IEnumerable<string> names = from student in students
+                            where student.Scores.Contains(95)
+                            select $"{student.FirstName} {student.LastName}: {string.Join(", ", student.Scores.Select(s => s.ToString()))}";
+```
+
+- Skip():跳过序列中指定位置之前的元素
+- SkipWhile():基于谓词函数跳过元素，直到元素不符合条件
+- Take():获取序列中指定位置之前的元素
+- TakeWhile():同上操作
+- Chunk():将序列元素拆分为指定最大大小的区块
+
+```C#
+var resource = Enumerable.Range(0, 8);
+// 012
+foreach (var i in resource.Take(3)){ }
+// 345678
+foreach (var i in resource.Skip(3)){ }
+// 012345
+foreach (var i in resource.TakeWhile(e=>e<5)){ }s
+// 678
+foreach (var i in resource.SkipWhile(e=>e<5)){ }
+// 平均分块，将数据分成三块，123、456、78
+int chunkNum = 1;
+foreach (int[] chunk in Enumerable.Range(0, 8).Chunk(3))
+{
+    Console.WriteLine($"Chunk {chunkNum++}:)");
+    foreach (int item in chunk)
+    {
+        Console.WriteLine($"   {item}");
+    }
+    Console.WriteLine();
+}
+```
+
+
+
+
 
 
 
